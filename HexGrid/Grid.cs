@@ -25,6 +25,9 @@ namespace HexGrid {
             }
         }
 
+        /// <summary>Readonly Cell List</summary>
+        public IReadOnlyList<Cell> Cells => cell_list;
+
         /// <summary>Return Sparse Matrix</summary>
         public IEnumerable<IEnumerable<(Dir dir, int index)>> Link {
             get {
@@ -92,10 +95,13 @@ namespace HexGrid {
                 if (cell_indexes.Contains(index)) {
                     cell_list.RemoveAt(index);
                 }
-                else {
-                    foreach (int dst_index in remap) {
-                        cell_list[index].Remap(index, dst_index);
-                    }
+            }
+
+            for (int index = 0; index < Count; index++) { 
+                for (int src_index = 0; src_index < remap.Length; src_index++) {
+                    int dst_index = remap[src_index];
+
+                    cell_list[index].Remap(src_index, dst_index);
                 }
             }
         }

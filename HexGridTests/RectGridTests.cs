@@ -35,6 +35,7 @@ namespace HexGrid.Tests {
                     }
 
                     Assert.IsTrue(grid.IsValid, $"{width}, {height}");
+                    Assert.AreEqual(width * height, grid.Count, $"count {width}, {height}");
 
                     Console.WriteLine("---------------------------");
                 }

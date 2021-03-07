@@ -11,12 +11,6 @@ namespace HexGrid {
         /// <summary>Grid Height</summary>
         public int Height { private set; get; }
 
-        /// <summary>Indexer</summary>
-        public Cell this[int x, int y]
-            => (x < Width && y < Height)
-             ? this[checked(x + y * Width)]
-             : throw new ArgumentOutOfRangeException($"{x}, {y}");
-
         /// <summary>Make Instance</summary>
         public RectGrid(int width, int height) : base(checked(width * height)) {
             if (width < 1 || height < 1) {
