@@ -12,9 +12,9 @@ namespace HexGrid {
         public int Height { private set; get; }
 
         /// <summary>Indexer</summary>
-        public (Cell cell, int px, int py) this[int x, int y]
+        public Cell this[int x, int y]
             => (x < Width && y < Height)
-             ? (this[checked(x + y * Width)], x, y * 2 + x % 2)
+             ? this[checked(x + y * Width)]
              : throw new ArgumentOutOfRangeException($"{x}, {y}");
 
         /// <summary>Make Instance</summary>
@@ -26,6 +26,9 @@ namespace HexGrid {
             for (int y = 0, i = 0; y < height; y++) {
                 for (int x = 0; x < width; x++, i++) {
                     Cell cell = this[i];
+
+                    cell.X = x;
+                    cell.Y = y * 2 + x % 2;
 
                     if (y > 0) {
                         cell.U = i - width;
@@ -71,6 +74,8 @@ namespace HexGrid {
 
             this.Width = width;
             this.Height = height;
+            this.CoordWidth  = width;
+            this.CoordHeight = height * 2;
         }
     }
 }

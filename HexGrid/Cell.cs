@@ -8,6 +8,21 @@ namespace HexGrid {
         /// <summary>None</summary>
         public const int None = -1;
 
+        private readonly static Dictionary<Dir, (int dx, int dy)> dir_coord_table = new() {
+            { Dir.U , ( 0, -2) },
+            { Dir.LU, (-1, -1) },
+            { Dir.RU, (+1, -1) },
+            { Dir.LD, (-1, +1) },
+            { Dir.RD, (+1, +1) },
+            { Dir.D , ( 0, +2) },
+        };
+
+        /// <summary>Dir to Coord</summary>
+        public static IReadOnlyDictionary<Dir, (int dx, int dy)> DirToCoord => dir_coord_table;
+
+        /// <summary>Index</summary>
+        public int Index { get; private set; }
+
         /// <summary>Upper</summary>
         public int U  { get; internal set; } = None;
        
@@ -25,6 +40,12 @@ namespace HexGrid {
 
         /// <summary>Downer</summary>
         public int D  { get; internal set; } = None;
+
+        /// <summary>Coord X</summary>
+        public int X { get; internal set; }
+
+        /// <summary>Coord Y</summary>
+        public int Y { get; internal set; }
 
         public int this[Dir dir] {
             get {
@@ -89,8 +110,16 @@ namespace HexGrid {
             }
         }
 
+        /// <summary>Make Instance</summary>
+        public Cell(int index) {
+            Index = index;
+        }
+
         /// <summary>Remap CellIndex</summary>
         internal void Remap(int src_index, int dst_index) {
+            if (Index == src_index) {
+                Index = dst_index;
+            }
             if (U == src_index) {
                 U = dst_index;
             }
@@ -112,9 +141,9 @@ namespace HexGrid {
         }
 
         /// <summary>Validation</summary>
-        internal bool IsValid(int self_index, int cells) {
+        internal bool IsValid(int cells) {
             foreach ((_, int id) in IndexList) {
-                if (id < None || id >= cells || id == self_index) {
+                if (id < None || id >= cells || id == Index) {
                     return false;
                 }
             }

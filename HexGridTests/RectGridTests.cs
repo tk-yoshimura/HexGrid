@@ -15,34 +15,13 @@ namespace HexGrid.Tests {
             for (int height = 1; height <= 8; height++) {
                 for (int width = 1; width <= 8; width++) {
 
-                    Console.WriteLine($"{width}, {height}");
+                    Console.WriteLine($"size = {width}, {height}");
 
                     RectGrid grid = new RectGrid(width, height);
 
-                    int?[,] cells = new int?[width, height * 2];
+                    Console.WriteLine("coord :");
 
-                    for (int y = 0, i = 0; y < height; y++) { 
-                        for (int x = 0; x < width; x++, i++) {
-                            (_, int px, int py) = grid[x, y];
-
-                            cells[px, py] = i;
-                        }
-                    }
-
-                    Console.WriteLine("pos :");
-
-                    for (int y = 0; y < height * 2; y++) { 
-                        for (int x = 0; x < width; x++) {
-                            if (cells[x, y] is null) {
-                                Console.Write("    ");
-                            }
-                            else { 
-                                Console.Write($"{cells[x, y].Value,4}");
-                            }
-                        }
-
-                        Console.Write("\n");
-                    }
+                    Console.WriteLine(grid.ToMap());
 
                     Console.WriteLine("link :");
 
@@ -53,15 +32,9 @@ namespace HexGrid.Tests {
                         index++;
                     }
 
-                    Console.WriteLine("plot :");
-
-                    Console.WriteLine(grid.PlotNeighborCells(0));
-                    Console.WriteLine(grid.PlotNeighborCells(width - 1));
-                    Console.WriteLine(grid.PlotNeighborCells(grid.Count / 2));
-                    Console.WriteLine(grid.PlotNeighborCells(width * height - width));
-                    Console.WriteLine(grid.PlotNeighborCells(width * height - 1));
-
                     Assert.IsTrue(grid.IsValid, $"{width}, {height}");
+
+                    Console.WriteLine("---------------------------");
                 }
             }
         }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace HexGrid {
 
@@ -11,8 +12,24 @@ namespace HexGrid {
         /// <summary>Cell Counts</summary>
         public int Count => cell_list.Count;
 
+        /// <summary>Coord Width</summary>
+        public int CoordWidth { get; protected set; }
+
+        /// <summary>Coord Height</summary>
+        public int CoordHeight { get; protected set; }
+
         /// <summary>Indexer</summary>
-        public Cell this[int index] => cell_list[index];
+        public Cell this[int index] {
+            get { 
+                return cell_list [index];
+            }
+        }
+
+        public virtual (int coord_width, int coord_height) Size {
+            get {
+                return (CoordWidth, CoordHeight);
+            }
+        }
 
         /// <summary>Make Instance</summary>
         internal Grid(int cells) {
@@ -20,11 +37,11 @@ namespace HexGrid {
                 throw new ArgumentException(nameof(cells));
             }
 
-            this.cell_list = new List<Cell>((new Cell[cells]).Select(_ => new Cell()));
+            this.cell_list = new List<Cell>((new Cell[cells]).Select((_, i) => new Cell(i)));
         }
 
         /// <summary>Remove Cells</summary>
-        public void Remove(int[] cell_indexes) {
+        protected void Remove(int[] cell_indexes) {
             if (cell_indexes is null) { 
                 throw new ArgumentNullException(nameof(cell_indexes));
             }
@@ -64,10 +81,14 @@ namespace HexGrid {
         /// <summary>Validation</summary>
         public bool IsValid {
             get {
+                if (!IsConnected) {
+                    return false;
+                }
+
                 for (int index = 0; index < Count; index++) {
                     Cell cell = cell_list[index];
                     
-                    if (!cell.IsValid(index, Count)) {
+                    if (!cell.IsValid(Count)) {
                         return false;
                     }
 
@@ -87,6 +108,34 @@ namespace HexGrid {
                         return false;
                     }
                     if (cell.D != Cell.None && cell_list[cell.D].U != index) {
+                        return false;
+                    }
+                }
+
+                for (int index = 0; index < Count; index++) {
+                    Cell cell = cell_list[index];
+                    
+                    if (cell.U  != Cell.None && cell.LU != Cell.None && cell_list[cell.U].LD  != cell.LU) {
+                        return false;
+                    }
+
+                    if (cell.LU != Cell.None && cell.LD != Cell.None && cell_list[cell.LU].D  != cell.LD) {
+                        return false;
+                    }
+
+                    if (cell.LD != Cell.None && cell.D  != Cell.None && cell_list[cell.LD].RD != cell.D) {
+                        return false;
+                    }
+
+                    if (cell.D  != Cell.None && cell.RD != Cell.None && cell_list[cell.D].RU  != cell.RD) {
+                        return false;
+                    }
+
+                    if (cell.RD != Cell.None && cell.RU != Cell.None && cell_list[cell.RD].U  != cell.RU) {
+                        return false;
+                    }
+
+                    if (cell.RU != Cell.None && cell.U  != Cell.None && cell_list[cell.RU].LU != cell.U) {
                         return false;
                     }
                 }
@@ -136,57 +185,115 @@ namespace HexGrid {
 
             return index;
         }
-               
-        /// <summary>NeighborCells</summary>
-        public int[] NeighborCells(int index, int range) {
-            if (index < 0 || index >= Count) {
-                throw new IndexOutOfRangeException(nameof(index));
+
+        /// <summary>Reflash Coord</summary>
+        protected void ReflashCoord() {
+            if (Count >= 1) {
+                Cell cell_root = cell_list.First();
+
+                List<int> searched_indexes = new(new int[] { Cell.None, cell_root.Index });
+                Stack<int> searching_indexes = new();
+
+                searching_indexes.Push(cell_root.Index);
+
+                cell_root.X = 0;
+                cell_root.Y = 0;
+
+                while (searching_indexes.Count > 0) {
+                    int searching_index = searching_indexes.Pop();
+                    Cell cell_searching = cell_list[searching_index];
+
+                    foreach ((Dir dir, int linked_index) in cell_list[searching_index].IndexList) {
+                        if (!searched_indexes.Contains(linked_index)) {
+                            searched_indexes.Add(linked_index);
+                            searching_indexes.Push(linked_index);
+
+                            Cell cell_linked = cell_list[linked_index];
+
+                            (int dx, int dy) = Cell.DirToCoord[dir];
+
+                            cell_linked.X = cell_searching.X + dx;
+                            cell_linked.Y = cell_searching.Y + dy;
+                        }
+                    }
+                }
+
+                int min_coord_x = cell_list.Select((cell) => cell.X).Min();
+                int min_coord_y = cell_list.Select((cell) => cell.Y).Min();
+
+                if (min_coord_x != 0 || min_coord_y != 0) {
+                    foreach (Cell cell in cell_list) {
+                        cell.X -= min_coord_x;
+                        cell.Y -= min_coord_y;
+                    }
+                }
+
+                CoordWidth  = cell_list.Select((cell) => cell.X).Max() + 1;
+                CoordHeight = cell_list.Select((cell) => cell.Y).Max() + 1;
             }
-            if (range < 0) { 
-                throw new IndexOutOfRangeException(nameof(range));
-            }
-
-            if (range == 0) {
-                return new int[] { index };
-            }
-
-            int[] cells = new int[checked(range * 6)];
-
-            cells[0]         = Move(index, Enumerable.Repeat(Dir.U,  range).ToArray());
-            cells[range]     = Move(index, Enumerable.Repeat(Dir.RU, range).ToArray());
-            cells[range * 2] = Move(index, Enumerable.Repeat(Dir.RD, range).ToArray());
-            cells[range * 3] = Move(index, Enumerable.Repeat(Dir.D,  range).ToArray());
-            cells[range * 4] = Move(index, Enumerable.Repeat(Dir.LD, range).ToArray());
-            cells[range * 5] = Move(index, Enumerable.Repeat(Dir.LU, range).ToArray());
-
-            for (int i = 1; i < range; i++) {
-                cells[i]             = Move(cells[i - 1],             Dir.RD);
-                cells[i + range]     = Move(cells[i + range - 1],     Dir.D);
-                cells[i + range * 2] = Move(cells[i + range * 2 - 1], Dir.LD);
-                cells[i + range * 3] = Move(cells[i + range * 3 - 1], Dir.LU);
-                cells[i + range * 4] = Move(cells[i + range * 4 - 1], Dir.U);
-                cells[i + range * 5] = Move(cells[i + range * 5 - 1], Dir.RU);
-            }
-
-            return cells;
         }
 
-        /// <summary>Plot NeighborCells</summary>
-        public string PlotNeighborCells(int index) {
-            int[] n1 = NeighborCells(index, 1);
-            int[] n2 = NeighborCells(index, 2);
+        /// <summary>Is Connected</summary>
+        public bool IsConnected {
+            get {
+                if (Count < 1) {
+                    return true;
+                }
 
-            string str = string.Empty;
+                List<int> searched_indexes = new(new int[] { Cell.None, cell_list.First().Index });
+                Stack<int> searching_indexes = new();
 
-            str += $"             {n2[ 0],8}\n";
-            str += $"      {n2[11],8},  {n2[ 1],8}\n";
-            str += $"{n2[10],8},  {n1[ 0],8},  {n2[ 2],8}\n";
-            str += $"      {n1[ 5],8},  {n1[ 1],8}\n";
-            str += $"{n2[ 9],8},  {index ,8},  {n2[ 3],8}\n";
-            str += $"      {n1[ 4],8},  {n1[ 2],8}\n";
-            str += $"{n2[ 8],8},  {n1[ 3],8},  {n2[ 4],8}\n";
-            str += $"      {n2[ 7],8},  {n2[ 5],8}\n";
-            str += $"             {n2[ 6],8}\n";
+                searching_indexes.Push(cell_list.First().Index);
+
+                while (searching_indexes.Count > 0) {
+                    int searching_index = searching_indexes.Pop();
+
+                    foreach ((_, int linked_index) in cell_list[searching_index].IndexList) {
+                        if (!searched_indexes.Contains(linked_index)) {
+                            searched_indexes.Add(linked_index);
+                            searching_indexes.Push(linked_index);
+                        }
+                    }
+                }
+
+                bool is_connected = searched_indexes.Count == Count + 1;
+
+                return is_connected;
+            }
+        }
+
+        public string ToMap() { 
+            int max_index = 0;
+            int?[,] cells = new int?[CoordWidth, CoordHeight];
+
+            foreach (Cell cell in cell_list) { 
+                cells[cell.X, cell.Y] = cell.Index;
+
+                if (max_index < cell.Index) {
+                    max_index = cell.Index;
+                }
+            }
+
+            int digits = $"{max_index}".Length;
+
+            string cell_null = new(' ', digits);
+
+            StringBuilder strbuilder = new();
+
+            for (int y = 0; y < CoordHeight; y++) { 
+                for (int x = 0; x < CoordWidth; x++) {
+                    if (cells[x, y] is null) {
+                        strbuilder.Append(cell_null);
+                    }
+                    else { 
+                        strbuilder.Append($"{cells[x, y].Value}".PadLeft(digits));
+                    }
+                }
+
+                strbuilder.Append("\n");
+            }
+
+            string str = strbuilder.ToString();
 
             return str;
         }
