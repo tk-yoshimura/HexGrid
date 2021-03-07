@@ -12,7 +12,7 @@ namespace HexGrid.Tests {
         [TestMethod()]
         public void HexaGridTest() {
 
-            for (int size = 1; size <= 8; size++) {
+            for (int size = 1; size <= 16; size++) {
 
                 Console.WriteLine($"size = {size}");
 
