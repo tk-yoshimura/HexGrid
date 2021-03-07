@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>HexGrid</name>
+    </assembly>
+    <members>
+        <member name="T:HexGrid.Cell">
+            <summary>Cell</summary>
+        </member>
+        <member name="F:HexGrid.Cell.None">
+            <summary>None</summary>
+        </member>
+        <member name="P:HexGrid.Cell.U">
+            <summary>Upper</summary>
+        </member>
+        <member name="P:HexGrid.Cell.LU">
+            <summary>LeftUpper</summary>
+        </member>
+        <member name="P:HexGrid.Cell.RU">
+            <summary>RightUpper</summary>
+        </member>
+        <member name="P:HexGrid.Cell.LD">
+            <summary>LeftDowner</summary>
+        </member>
+        <member name="P:HexGrid.Cell.RD">
+            <summary>RightDowner</summary>
+        </member>
+        <member name="P:HexGrid.Cell.D">
+            <summary>Downer</summary>
+        </member>
+        <member name="P:HexGrid.Cell.IndexList">
+            <summary>Enum CellID</summary>
+        </member>
+        <member name="M:HexGrid.Cell.Remap(System.Int32,System.Int32)">
+            <summary>Remap CellIndex</summary>
+        </member>
+        <member name="M:HexGrid.Cell.IsValid(System.Int32,System.Int32)">
+            <summary>Validation</summary>
+        </member>
+        <member name="T:HexGrid.Grid">
+            <summary>Generic Grid</summary>
+        </member>
+        <member name="P:HexGrid.Grid.Count">
+            <summary>Cell Counts</summary>
+        </member>
+        <member name="P:HexGrid.Grid.Item(System.Int32)">
+            <summary>Indexer</summary>
+        </member>
+        <member name="M:HexGrid.Grid.#ctor(System.Int32)">
+            <summary>Make Instance</summary>
+        </member>
+        <member name="M:HexGrid.Grid.Remove(System.Int32[])">
+            <summary>Remove Cells</summary>
+        </member>
+        <member name="P:HexGrid.Grid.IsValid">
+            <summary>Validation</summary>
+        </member>
+        <member name="T:HexGrid.RectGrid">
+            <summary>Rectangle Grid</summary>
+        </member>
+        <member name="P:HexGrid.RectGrid.Width">
+            <summary>Grid Width</summary>
+        </member>
+        <member name="P:HexGrid.RectGrid.Height">
+            <summary>Grid Height</summary>
+        </member>
+        <member name="M:HexGrid.RectGrid.#ctor(System.Int32,System.Int32)">
+            <summary>Make Instance</summary>
+        </member>
+    </members>
+</doc>
