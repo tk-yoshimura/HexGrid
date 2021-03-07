@@ -19,10 +19,12 @@ namespace HexGrid.Tests {
 
                     RectGrid grid = new RectGrid(width, height);
 
-                    Console.WriteLine("coord :");
+                    Console.WriteLine($"mapsize = {grid.MapWidth}, {grid.MapHeight}");
 
-                    Console.WriteLine(grid.ToMap());
+                    Console.WriteLine("map :");
 
+                    Console.WriteLine(grid.ToString());
+                    
                     Console.WriteLine("link :");
 
                     int index = 0;

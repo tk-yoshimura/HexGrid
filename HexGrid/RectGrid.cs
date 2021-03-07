@@ -74,8 +74,8 @@ namespace HexGrid {
 
             this.Width = width;
             this.Height = height;
-            this.CoordWidth  = width;
-            this.CoordHeight = height * 2;
+            this.MapWidth  = width;
+            this.MapHeight = width > 1 ? height * 2 : height * 2 - 1;
         }
     }
 }

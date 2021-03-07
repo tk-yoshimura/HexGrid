@@ -12,11 +12,11 @@ namespace HexGrid {
         /// <summary>Cell Counts</summary>
         public int Count => cell_list.Count;
 
-        /// <summary>Coord Width</summary>
-        public int CoordWidth { get; protected set; }
+        /// <summary>Map Width</summary>
+        public int MapWidth { get; protected set; }
 
-        /// <summary>Coord Height</summary>
-        public int CoordHeight { get; protected set; }
+        /// <summary>Map Height</summary>
+        public int MapHeight { get; protected set; }
 
         /// <summary>Indexer</summary>
         public Cell this[int index] {
@@ -25,9 +25,31 @@ namespace HexGrid {
             }
         }
 
-        public virtual (int coord_width, int coord_height) Size {
+        /// <summary>Return Sparse Matrix</summary>
+        public IEnumerable<IEnumerable<(Dir dir, int index)>> Link {
             get {
-                return (CoordWidth, CoordHeight);
+                foreach (Cell cell in cell_list) {
+                    yield return cell.IndexList;
+                }
+            }
+        }
+
+        /// <summary>Return Cell Map</summary>
+        public int[,] Map {
+            get {
+                int[,] cells = new int[MapWidth, MapHeight];
+
+                for (int y = 0; y < MapHeight; y++) {
+                    for (int x = 0; x < MapWidth; x++) {
+                        cells[x, y] = Cell.None;
+                    }
+                }
+
+                foreach (Cell cell in cell_list) {
+                    cells[cell.X, cell.Y] = cell.Index;
+                }
+
+                return cells;
             }
         }
 
@@ -87,10 +109,45 @@ namespace HexGrid {
 
                 for (int index = 0; index < Count; index++) {
                     Cell cell = cell_list[index];
-                    
+
                     if (!cell.IsValid(Count)) {
                         return false;
                     }
+                }
+
+                if (!IsValidConnects) {
+                    return false;
+                }
+
+                int[] ref_counts = new int[Count];
+
+                foreach (Cell cell in cell_list) {
+                    foreach ((_, int index) in cell.IndexList) {
+                        ref_counts[index]++;
+                    }
+                }
+
+                if (ref_counts.Any(count => count > 6)) {
+                    return false;
+                }
+
+                if (MapWidth != cell_list.Select((cell) => cell.X).Max() + 1) {
+                    return false;
+                }
+
+                if (MapHeight != cell_list.Select((cell) => cell.Y).Max() + 1) {
+                    return false;
+                }
+
+                return true;
+            }
+        }
+
+        /// <summary>Is Valid Connects</summary>
+        public bool IsValidConnects {
+            get {
+                for (int index = 0; index < Count; index++) {
+                    Cell cell = cell_list[index];
 
                     if (cell.U != Cell.None && cell_list[cell.U].D != index) {
                         return false;
@@ -110,126 +167,33 @@ namespace HexGrid {
                     if (cell.D != Cell.None && cell_list[cell.D].U != index) {
                         return false;
                     }
-                }
 
-                for (int index = 0; index < Count; index++) {
-                    Cell cell = cell_list[index];
-                    
-                    if (cell.U  != Cell.None && cell.LU != Cell.None && cell_list[cell.U].LD  != cell.LU) {
+                    if (cell.U != Cell.None && cell.LU != Cell.None && cell_list[cell.U].LD != cell.LU) {
                         return false;
                     }
 
-                    if (cell.LU != Cell.None && cell.LD != Cell.None && cell_list[cell.LU].D  != cell.LD) {
+                    if (cell.LU != Cell.None && cell.LD != Cell.None && cell_list[cell.LU].D != cell.LD) {
                         return false;
                     }
 
-                    if (cell.LD != Cell.None && cell.D  != Cell.None && cell_list[cell.LD].RD != cell.D) {
+                    if (cell.LD != Cell.None && cell.D != Cell.None && cell_list[cell.LD].RD != cell.D) {
                         return false;
                     }
 
-                    if (cell.D  != Cell.None && cell.RD != Cell.None && cell_list[cell.D].RU  != cell.RD) {
+                    if (cell.D != Cell.None && cell.RD != Cell.None && cell_list[cell.D].RU != cell.RD) {
                         return false;
                     }
 
-                    if (cell.RD != Cell.None && cell.RU != Cell.None && cell_list[cell.RD].U  != cell.RU) {
+                    if (cell.RD != Cell.None && cell.RU != Cell.None && cell_list[cell.RD].U != cell.RU) {
                         return false;
                     }
 
-                    if (cell.RU != Cell.None && cell.U  != Cell.None && cell_list[cell.RU].LU != cell.U) {
+                    if (cell.RU != Cell.None && cell.U != Cell.None && cell_list[cell.RU].LU != cell.U) {
                         return false;
                     }
-                }
-
-                int[] ref_counts = new int[Count];
-
-                foreach (Cell cell in cell_list) {
-                    foreach ((_, int index) in cell.IndexList) {
-                        ref_counts[index]++;
-                    }
-                }
-
-                if (ref_counts.Any(count => count > 6)) {
-                    return false;
                 }
 
                 return true;
-            }
-        }
-
-        /// <summary>Return Sparse Matrix</summary>
-        public IEnumerable<IEnumerable<(Dir dir, int index)>> Link {
-            get {
-                foreach (Cell cell in cell_list) {
-                    yield return cell.IndexList;
-                }
-            }
-        }
-
-        /// <summary>Move on Grid</summary>
-        public int Move(int index, params Dir[] dirs) {
-            if (index >= Count) {
-                throw new IndexOutOfRangeException(nameof(index));
-            }
-
-            if (index < 0) {
-                return Cell.None;
-            }
-
-            foreach (Dir dir in dirs) {
-                index = cell_list[index][dir];
-
-                if (index < 0) {
-                    return Cell.None;
-                }
-            }
-
-            return index;
-        }
-
-        /// <summary>Reflash Coord</summary>
-        protected void ReflashCoord() {
-            if (Count >= 1) {
-                Cell cell_root = cell_list.First();
-
-                List<int> searched_indexes = new(new int[] { Cell.None, cell_root.Index });
-                Stack<int> searching_indexes = new();
-
-                searching_indexes.Push(cell_root.Index);
-
-                cell_root.X = 0;
-                cell_root.Y = 0;
-
-                while (searching_indexes.Count > 0) {
-                    int searching_index = searching_indexes.Pop();
-                    Cell cell_searching = cell_list[searching_index];
-
-                    foreach ((Dir dir, int linked_index) in cell_list[searching_index].IndexList) {
-                        if (!searched_indexes.Contains(linked_index)) {
-                            searched_indexes.Add(linked_index);
-                            searching_indexes.Push(linked_index);
-
-                            Cell cell_linked = cell_list[linked_index];
-
-                            (int dx, int dy) = Cell.DirToCoord[dir];
-
-                            cell_linked.X = cell_searching.X + dx;
-                            cell_linked.Y = cell_searching.Y + dy;
-                        }
-                    }
-                }
-
-                int min_coord_x = cell_list.Select((cell) => cell.X).Min();
-                int min_coord_y = cell_list.Select((cell) => cell.Y).Min();
-
-                if (min_coord_x != 0 || min_coord_y != 0) {
-                    foreach (Cell cell in cell_list) {
-                        cell.X -= min_coord_x;
-                        cell.Y -= min_coord_y;
-                    }
-                }
-
-                CoordWidth  = cell_list.Select((cell) => cell.X).Max() + 1;
-                CoordHeight = cell_list.Select((cell) => cell.Y).Max() + 1;
             }
         }
 
@@ -262,35 +226,27 @@ namespace HexGrid {
             }
         }
 
-        public string ToMap() { 
-            int max_index = 0;
-            int?[,] cells = new int?[CoordWidth, CoordHeight];
+        /// <summary>To String Map</summary>
+        public override string ToString() {
+            int[,] map = Map;
 
-            foreach (Cell cell in cell_list) { 
-                cells[cell.X, cell.Y] = cell.Index;
-
-                if (max_index < cell.Index) {
-                    max_index = cell.Index;
-                }
-            }
-
-            int digits = $"{max_index}".Length;
+            int digits = $"{map.Cast<int>().Max()}".Length + 2;
 
             string cell_null = new(' ', digits);
 
             StringBuilder strbuilder = new();
 
-            for (int y = 0; y < CoordHeight; y++) { 
-                for (int x = 0; x < CoordWidth; x++) {
-                    if (cells[x, y] is null) {
+            for (int y = 0; y < MapHeight; y++) { 
+                for (int x = 0; x < MapWidth; x++) {
+                    if (map[x, y] < 0) {
                         strbuilder.Append(cell_null);
                     }
                     else { 
-                        strbuilder.Append($"{cells[x, y].Value}".PadLeft(digits));
+                        strbuilder.Append($"{map[x, y]}".PadLeft(digits));
                     }
                 }
 
-                strbuilder.Append("\n");
+                strbuilder.Append('\n');
             }
 
             string str = strbuilder.ToString();
