@@ -47,6 +47,7 @@ namespace HexGrid {
         /// <summary>Coord Y</summary>
         public int Y { get; internal set; }
 
+        /// <summary>Indexer</summary>
         public int this[Dir dir] {
             get {
                 return dir switch {

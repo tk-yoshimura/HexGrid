@@ -10,6 +10,12 @@
         <member name="F:HexGrid.Cell.None">
             <summary>None</summary>
         </member>
+        <member name="P:HexGrid.Cell.DirToCoord">
+            <summary>Dir to Coord</summary>
+        </member>
+        <member name="P:HexGrid.Cell.Index">
+            <summary>Index</summary>
+        </member>
         <member name="P:HexGrid.Cell.U">
             <summary>Upper</summary>
         </member>
@@ -28,14 +34,29 @@
         <member name="P:HexGrid.Cell.D">
             <summary>Downer</summary>
         </member>
+        <member name="P:HexGrid.Cell.X">
+            <summary>Coord X</summary>
+        </member>
+        <member name="P:HexGrid.Cell.Y">
+            <summary>Coord Y</summary>
+        </member>
+        <member name="P:HexGrid.Cell.Item(HexGrid.Dir)">
+            <summary>Indexer</summary>
+        </member>
         <member name="P:HexGrid.Cell.IndexList">
             <summary>Enum CellID</summary>
+        </member>
+        <member name="M:HexGrid.Cell.#ctor(System.Int32)">
+            <summary>Make Instance</summary>
         </member>
         <member name="M:HexGrid.Cell.Remap(System.Int32,System.Int32)">
             <summary>Remap CellIndex</summary>
         </member>
-        <member name="M:HexGrid.Cell.IsValid(System.Int32,System.Int32)">
+        <member name="M:HexGrid.Cell.IsValid(System.Int32)">
             <summary>Validation</summary>
+        </member>
+        <member name="T:HexGrid.Dir">
+            <summary>Dir</summary>
         </member>
         <member name="F:HexGrid.Dir.U">
             <summary>Upper</summary>
@@ -61,8 +82,23 @@
         <member name="P:HexGrid.Grid.Count">
             <summary>Cell Counts</summary>
         </member>
+        <member name="P:HexGrid.Grid.MapWidth">
+            <summary>Map Width</summary>
+        </member>
+        <member name="P:HexGrid.Grid.MapHeight">
+            <summary>Map Height</summary>
+        </member>
         <member name="P:HexGrid.Grid.Item(System.Int32)">
             <summary>Indexer</summary>
+        </member>
+        <member name="P:HexGrid.Grid.Cells">
+            <summary>Readonly Cell List</summary>
+        </member>
+        <member name="P:HexGrid.Grid.Link">
+            <summary>Return Sparse Matrix</summary>
+        </member>
+        <member name="P:HexGrid.Grid.Map">
+            <summary>Return Cell Map</summary>
         </member>
         <member name="M:HexGrid.Grid.#ctor(System.Int32)">
             <summary>Make Instance</summary>
@@ -73,8 +109,23 @@
         <member name="P:HexGrid.Grid.IsValid">
             <summary>Validation</summary>
         </member>
-        <member name="P:HexGrid.Grid.Link">
-            <summary>Return Sparse Matrix</summary>
+        <member name="P:HexGrid.Grid.IsValidConnects">
+            <summary>Is Valid Connects</summary>
+        </member>
+        <member name="P:HexGrid.Grid.IsConnected">
+            <summary>Is Connected</summary>
+        </member>
+        <member name="M:HexGrid.Grid.ToString">
+            <summary>To String Map</summary>
+        </member>
+        <member name="T:HexGrid.HexaGrid">
+            <summary>Hexagon Grid</summary>
+        </member>
+        <member name="P:HexGrid.HexaGrid.Size">
+            <summary>Grid Size</summary>
+        </member>
+        <member name="M:HexGrid.HexaGrid.#ctor(System.Int32)">
+            <summary>Make Instance</summary>
         </member>
         <member name="T:HexGrid.RectGrid">
             <summary>Rectangle Grid</summary>

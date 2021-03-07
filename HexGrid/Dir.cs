@@ -1,4 +1,6 @@
 ﻿namespace HexGrid {
+
+    /// <summary>Dir</summary>
     public enum Dir : int {
         /// <summary>Upper</summary>
         U,
