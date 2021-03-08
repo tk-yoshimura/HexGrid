@@ -3,7 +3,7 @@
 namespace HexGrid {
 
     /// <summary>Triangle Grid</summary>
-    public class TriGrid : RectGrid{
+    public class TriGrid : RectGrid {
 
         /// <summary>Grid Size</summary>
         public int Size { private set; get; }
@@ -47,7 +47,7 @@ namespace HexGrid {
                         remove_indexes.Add(Width - j - 1 + i * Width);
                     }
                 }
-    
+
                 Remove(remove_indexes.ToArray());
 
                 foreach (Cell cell in Cells) {

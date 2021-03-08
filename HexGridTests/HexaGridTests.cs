@@ -18,14 +18,14 @@ namespace HexGrid.Tests {
                 Console.WriteLine("map :");
 
                 Console.WriteLine(grid.ToString());
-                    
+
                 Console.WriteLine("link :");
 
                 foreach ((int index, var link) in grid.Link) {
                     Console.WriteLine($"{index} : {string.Join(',', link)}");
                 }
 
-                Assert.IsTrue(grid.IsValid, $"{size}");
+                Assert.IsTrue(GridValidationUtil.IsValid(grid), $"{size}");
                 Assert.AreEqual(1 + size * (size - 1) / 2 * 6, grid.Count, $"{size}");
 
                 Console.WriteLine("---------------------------");

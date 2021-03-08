@@ -3,7 +3,7 @@
 namespace HexGrid {
 
     /// <summary>Rectangle Grid</summary>
-    public class RectGrid : Grid{
+    public class RectGrid : Grid {
 
         /// <summary>Grid Width</summary>
         public int Width { private set; get; }
@@ -68,7 +68,7 @@ namespace HexGrid {
 
             this.Width = width;
             this.Height = height;
-            this.MapWidth  = height > 1 ? width * 2 : width * 2 - 1;
+            this.MapWidth = height > 1 ? width * 2 : width * 2 - 1;
             this.MapHeight = height;
         }
     }

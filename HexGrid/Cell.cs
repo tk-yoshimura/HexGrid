@@ -11,8 +11,8 @@ namespace HexGrid {
         private readonly static Dictionary<Dir, (int dx, int dy)> dir_coord_table = new() {
             { Dir.LU, (-1, -1) },
             { Dir.RU, (+1, -1) },
-            { Dir.L , (-2,  0) },
-            { Dir.R , (+2,  0) },
+            { Dir.L, (-2, 0) },
+            { Dir.R, (+2, 0) },
             { Dir.LD, (-1, +1) },
             { Dir.RD, (+1, +1) },
         };
@@ -25,19 +25,19 @@ namespace HexGrid {
 
         /// <summary>LeftUpper</summary>
         public int LU { get; internal set; } = None;
-        
+
         /// <summary>RightUpper</summary>
         public int RU { get; internal set; } = None;
 
         /// <summary>Left</summary>
-        public int L  { get; internal set; } = None;
+        public int L { get; internal set; } = None;
 
         /// <summary>Right</summary>
-        public int R  { get; internal set; } = None;
-       
+        public int R { get; internal set; } = None;
+
         /// <summary>LeftDowner</summary>
         public int LD { get; internal set; } = None;
-        
+
         /// <summary>RightDowner</summary>
         public int RD { get; internal set; } = None;
 
@@ -54,15 +54,15 @@ namespace HexGrid {
                 return dir switch {
                     Dir.LU => LU,
                     Dir.RU => RU,
-                    Dir.L  => L,
-                    Dir.R  => R,
+                    Dir.L => L,
+                    Dir.R => R,
                     Dir.LD => LD,
                     Dir.RD => RD,
                     _ => throw new ArgumentException(nameof(dir)),
                 };
             }
 
-            internal set { 
+            internal set {
                 switch (dir) {
                     case Dir.LU:
                         LU = value;

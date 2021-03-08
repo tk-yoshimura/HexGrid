@@ -3,7 +3,7 @@
 namespace HexGrid {
 
     /// <summary>Hexagon Grid</summary>
-    public class HexaGrid : RectGrid{
+    public class HexaGrid : RectGrid {
 
         /// <summary>Grid Size</summary>
         public int Size { private set; get; }
