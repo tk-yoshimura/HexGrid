@@ -37,10 +37,22 @@ namespace HexGrid {
 
         /// <summary>Is Valid Cell Index</summary>
         public static bool IsValidCellIndex(Grid grid) {
+            int i = 0;
             foreach (Cell cell in grid.Cells) {
                 if (!cell.IsValid(grid.Count)) {
                     return false;
                 }
+                if (i != cell.Index) {
+                    return false;
+                }
+
+                i++;
+            }
+
+            int index_max = grid.Cells.Select((cell) => cell.Index).Max();
+
+            if (index_max + 1 != grid.Count) {
+                return false;
             }
 
             return true;
@@ -184,13 +196,13 @@ namespace HexGrid {
             int offset_x = grid.Cells.First().X % 2;
             int offset_y = grid.Cells.First().Y % 2;
 
-            for (int y = 0; y < map.GetLength(1); y++) { 
+            for (int y = 0; y < map.GetLength(1); y++) {
                 for (int x = 0; x < map.GetLength(0); x++) {
                     if (map[x, y] != Cell.None) {
                         if (y % 2 == offset_y && x % 2 != offset_x) {
                             return false;
                         }
-                        else if(y % 2 != offset_y && x % 2 == offset_x) {
+                        else if (y % 2 != offset_y && x % 2 == offset_x) {
                             return false;
                         }
                     }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Linq;
 
 namespace HexGrid.Tests {
     [TestClass()]
@@ -28,6 +29,22 @@ namespace HexGrid.Tests {
 
                     Assert.IsTrue(GridValidationUtil.IsValid(grid), $"{width}, {height}");
                     Assert.AreEqual(width * height, grid.Count, $"count {width}, {height}");
+
+                    if (width >= 2 && height >= 2) {
+                        Assert.AreEqual(2, grid[0].Links);
+                        Assert.AreEqual(3, grid[width - 1].Links);
+
+                        if (height % 2 == 0) {
+                            Assert.AreEqual(3, grid[width * height - width].Links);
+                            Assert.AreEqual(2, grid[width * height - 1].Links);
+                        }
+                        else{
+                            Assert.AreEqual(2, grid[width * height - width].Links);
+                            Assert.AreEqual(3, grid[width * height - 1].Links);
+                        }
+
+                        Assert.AreEqual(2, grid.Cells.Where((cell) => cell.Links == 2).Count());
+                    }
 
                     Console.WriteLine("---------------------------");
                 }

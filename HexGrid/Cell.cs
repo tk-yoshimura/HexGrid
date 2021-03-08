@@ -41,12 +41,16 @@ namespace HexGrid {
         /// <summary>RightDowner</summary>
         public int RD { get; internal set; } = None;
 
-
         /// <summary>Coord X</summary>
         public int X { get; internal set; }
 
         /// <summary>Coord Y</summary>
         public int Y { get; internal set; }
+
+        /// <summary>Make Instance</summary>
+        public Cell(int index) {
+            Index = index;
+        }
 
         /// <summary>Indexer</summary>
         public int this[Dir dir] {
@@ -112,9 +116,32 @@ namespace HexGrid {
             }
         }
 
-        /// <summary>Make Instance</summary>
-        public Cell(int index) {
-            Index = index;
+        /// <summary>Count Link</summary>
+        public int Links {
+            get {
+                int count = 0;
+
+                if (LU != None) {
+                    count++;
+                }
+                if (RU != None) {
+                    count++;
+                }
+                if (L != None) {
+                    count++;
+                }
+                if (R != None) {
+                    count++;
+                }
+                if (LD != None) {
+                    count++;
+                }
+                if (RD != None) {
+                    count++;
+                }
+
+                return count;
+            }
         }
 
         /// <summary>Remap CellIndex</summary>

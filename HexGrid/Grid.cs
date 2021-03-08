@@ -8,7 +8,7 @@ namespace HexGrid {
 
     /// <summary>Generic Grid</summary>
     [DebuggerDisplay("Grid size:{MapWidth}x{MapHeight} cells:{Count}")]
-    public class Grid {
+    public abstract class Grid {
         private readonly List<Cell> cell_list;
 
         /// <summary>Cell Counts</summary>
@@ -19,6 +19,15 @@ namespace HexGrid {
 
         /// <summary>Map Height</summary>
         public int MapHeight { get; protected set; }
+
+        /// <summary>Make Instance</summary>
+        internal Grid(int cells) {
+            if (cells < 0) {
+                throw new ArgumentException(nameof(cells));
+            }
+
+            this.cell_list = new List<Cell>((new Cell[cells]).Select((_, i) => new Cell(i)));
+        }
 
         /// <summary>Indexer</summary>
         public Cell this[int index] {
@@ -56,15 +65,6 @@ namespace HexGrid {
 
                 return cells;
             }
-        }
-
-        /// <summary>Make Instance</summary>
-        internal Grid(int cells) {
-            if (cells < 0) {
-                throw new ArgumentException(nameof(cells));
-            }
-
-            this.cell_list = new List<Cell>((new Cell[cells]).Select((_, i) => new Cell(i)));
         }
 
         /// <summary>Remove Cells</summary>
