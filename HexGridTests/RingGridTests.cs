@@ -8,16 +8,16 @@ using System.Threading.Tasks;
 
 namespace HexGrid.Tests {
     [TestClass()]
-    public class RectGridTests {
+    public class RingGridTests {
         [TestMethod()]
-        public void RectGridTest() {
+        public void RingGridTest() {
 
             for (int height = 1; height <= 8; height++) {
-                for (int width = 1; width <= 8; width++) {
+                for (int width = 2; width <= 8; width += 2) {
 
                     Console.WriteLine($"size = {width}, {height}");
 
-                    RectGrid grid = new RectGrid(width, height);
+                    RingGrid grid = new RingGrid(width, height);
 
                     Console.WriteLine($"mapsize = {grid.MapWidth}, {grid.MapHeight}");
 

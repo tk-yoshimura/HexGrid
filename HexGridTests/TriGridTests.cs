@@ -26,11 +26,8 @@ namespace HexGrid.Tests {
                     
                 Console.WriteLine("link :");
 
-                int index = 0;
-                foreach (var l in grid.Link) {
-                    Console.WriteLine($"{index} : {string.Join(',', l)}");
-
-                    index++;
+                foreach ((int index, var link) in grid.Link) {
+                    Console.WriteLine($"{index} : {string.Join(',', link)}");
                 }
 
                 Assert.IsTrue(grid.IsValid, $"{size}");

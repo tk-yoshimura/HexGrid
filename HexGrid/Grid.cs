@@ -29,10 +29,10 @@ namespace HexGrid {
         public IReadOnlyList<Cell> Cells => cell_list;
 
         /// <summary>Return Sparse Matrix</summary>
-        public IEnumerable<IEnumerable<(Dir dir, int index)>> Link {
+        public IEnumerable<(int index, IEnumerable<(Dir dir, int index)>)> Link {
             get {
                 foreach (Cell cell in cell_list) {
-                    yield return cell.IndexList;
+                    yield return (cell.Index, cell.IndexList);
                 }
             }
         }
