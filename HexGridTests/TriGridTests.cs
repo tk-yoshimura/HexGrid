@@ -26,7 +26,7 @@ namespace HexGrid.Tests {
                 }
 
                 Assert.IsTrue(grid.IsValid, $"{size}");
-                Assert.AreEqual(1 + size * (size - 1) / 2 * 3, grid.Count, $"{size}");
+                Assert.AreEqual(size * (size + 1) / 2, grid.Count, $"{size}");
 
                 Console.WriteLine("---------------------------");
             }

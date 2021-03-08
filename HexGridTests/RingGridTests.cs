@@ -8,7 +8,7 @@ namespace HexGrid.Tests {
         public void RingGridTest() {
 
             for (int height = 1; height <= 8; height++) {
-                for (int width = 2; width <= 8; width += 2) {
+                for (int width = 2; width <= 8; width += 1) {
 
                     Console.WriteLine($"size = {width}, {height}");
 
