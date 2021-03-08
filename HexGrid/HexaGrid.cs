@@ -12,33 +12,54 @@ namespace HexGrid {
         public HexaGrid(int size) : base(size * 2 - 1, size * 2 - 1) {
             List<int> remove_indexes = new();
 
-            for (int i = 0, remove_lines = size / 2; i < remove_lines; i++) {
-                int remove_cells = (size | 1) - i * 2 - 2;
+            if (size % 2 == 1) {
+                for (int i = 0, remove_lines = size - 2; i < remove_lines; i++) {
+                    int remove_cells = size / 2 - (i + 1) / 2;
 
-                for (int j = 0; j < remove_cells; j++) {
-                    remove_indexes.Add(i * Width + j);
-                    remove_indexes.Add((i + 1) * Width - (j + 1));
+                    for (int j = 0; j < remove_cells; j++) {
+                        remove_indexes.Add(j + i * Width);
+                        remove_indexes.Add(j + (Height - i - 1) * Width);
+                    }
                 }
-            }
 
-            for (int i = 0, remove_lines = (size - 1) / 2; i < remove_lines; i++) {
-                int remove_cells = ((size - 1) & ~1) - i * 2;
+                for (int i = 0, remove_lines = size - 1; i < remove_lines; i++) {
+                    int remove_cells = size / 2 - i / 2;
 
-                for (int j = 0; j < remove_cells; j++) {
-                    remove_indexes.Add((Height - i - 1) * Width + j);
-                    remove_indexes.Add((Height - i) * Width - (j + 1));
+                    for (int j = 0; j < remove_cells; j++) {
+                        remove_indexes.Add(Width - j - 1 + i * Width);
+                        remove_indexes.Add(Width - j - 1 + (Height - i - 1) * Width);
+                    }
                 }
+
+                Remove(remove_indexes.ToArray());
             }
+            else {
+                for (int i = 0, remove_lines = size - 1; i < remove_lines; i++) {
+                    int remove_cells = size / 2 - (i + 1) / 2;
 
-            Remove(remove_indexes.ToArray());
+                    for (int j = 0; j < remove_cells; j++) {
+                        remove_indexes.Add(j + i * Width);
+                        remove_indexes.Add(j + (Height - i - 1) * Width);
+                    }
+                }
 
-            if (size % 2 == 0) {
+                for (int i = 0, remove_lines = size - 2; i < remove_lines; i++) {
+                    int remove_cells = size / 2 - (i + 2) / 2;
+
+                    for (int j = 0; j < remove_cells; j++) {
+                        remove_indexes.Add(Width - j - 1 + i * Width);
+                        remove_indexes.Add(Width - j - 1 + (Height - i - 1) * Width);
+                    }
+                }
+
+                Remove(remove_indexes.ToArray());
+
                 foreach (Cell cell in Cells) {
-                    cell.Y -= 1;
+                    cell.X -= 1;
                 }
             }
 
-            MapHeight = size * 4 - 3;
+            MapWidth = size * 4 - 3;
             Size = size;
         }
     }

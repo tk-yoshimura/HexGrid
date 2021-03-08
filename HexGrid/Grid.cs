@@ -157,13 +157,16 @@ namespace HexGrid {
                 for (int index = 0; index < Count; index++) {
                     Cell cell = cell_list[index];
 
-                    if (cell.U != Cell.None && cell_list[cell.U].D != index) {
-                        return false;
-                    }
                     if (cell.LU != Cell.None && cell_list[cell.LU].RD != index) {
                         return false;
                     }
                     if (cell.LD != Cell.None && cell_list[cell.LD].RU != index) {
+                        return false;
+                    }
+                    if (cell.L != Cell.None && cell_list[cell.L].R != index) {
+                        return false;
+                    }
+                    if (cell.R != Cell.None && cell_list[cell.R].L != index) {
                         return false;
                     }
                     if (cell.RU != Cell.None && cell_list[cell.RU].LD != index) {
@@ -172,31 +175,28 @@ namespace HexGrid {
                     if (cell.RD != Cell.None && cell_list[cell.RD].LU != index) {
                         return false;
                     }
-                    if (cell.D != Cell.None && cell_list[cell.D].U != index) {
+
+                    if (cell.LU != Cell.None && cell.RU != Cell.None && cell_list[cell.LU].R != cell.RU) {
                         return false;
                     }
 
-                    if (cell.U != Cell.None && cell.LU != Cell.None && cell_list[cell.U].LD != cell.LU) {
+                    if (cell.RU != Cell.None && cell.R  != Cell.None && cell_list[cell.RU].RD != cell.R) {
                         return false;
                     }
 
-                    if (cell.LU != Cell.None && cell.LD != Cell.None && cell_list[cell.LU].D != cell.LD) {
+                    if (cell.R  != Cell.None && cell.RD != Cell.None && cell_list[cell.R].LD != cell.RD) {
                         return false;
                     }
 
-                    if (cell.LD != Cell.None && cell.D != Cell.None && cell_list[cell.LD].RD != cell.D) {
+                    if (cell.RD != Cell.None && cell.LD != Cell.None && cell_list[cell.RD].L != cell.LD) {
                         return false;
                     }
 
-                    if (cell.D != Cell.None && cell.RD != Cell.None && cell_list[cell.D].RU != cell.RD) {
+                    if (cell.LD != Cell.None && cell.L  != Cell.None && cell_list[cell.LD].LU != cell.L) {
                         return false;
                     }
 
-                    if (cell.RD != Cell.None && cell.RU != Cell.None && cell_list[cell.RD].U != cell.RU) {
-                        return false;
-                    }
-
-                    if (cell.RU != Cell.None && cell.U != Cell.None && cell_list[cell.RU].LU != cell.U) {
+                    if (cell.L  != Cell.None && cell.LU != Cell.None && cell_list[cell.L].RU != cell.LU) {
                         return false;
                     }
                 }
@@ -238,7 +238,7 @@ namespace HexGrid {
         public override string ToString() {
             int[,] map = Map;
 
-            int digits = $"{map.Cast<int>().Max()}".Length + 2;
+            int digits = $"{map.Cast<int>().Max()}".Length;
 
             string cell_null = new(' ', digits);
 

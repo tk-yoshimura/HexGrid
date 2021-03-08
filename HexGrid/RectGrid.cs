@@ -21,46 +21,46 @@ namespace HexGrid {
                 for (int x = 0; x < width; x++, i++) {
                     Cell cell = this[i];
 
-                    cell.X = x;
-                    cell.Y = y * 2 + x % 2;
+                    cell.X = x * 2 + y % 2;
+                    cell.Y = y;
 
-                    if (y > 0) {
-                        cell.U = i - width;
+                    if (x > 0) {
+                        cell.L = i - 1;
                     }
-                    if (y < height - 1) {
-                        cell.D = i + width;
+                    if (x < width - 1) {
+                        cell.R = i + 1;
                     }
 
-                    if (x % 2 == 0) {
+                    if (y % 2 == 0) {
                         if (y > 0) {
-                            if (x > 0) {
-                                cell.LU = cell.U - 1;
-                            }
-                            if (x < width - 1) {
-                                cell.RU = cell.U + 1;
-                            }
+                            cell.RU = i - width;
+                        }
+                        if (y < height - 1) {
+                            cell.RD = i + width;
                         }
                         if (x > 0) {
-                            cell.LD = i - 1;
-                        }
-                        if (x < width - 1) {
-                            cell.RD = i + 1;
+                            if (y > 0) {
+                                cell.LU = i - width - 1;
+                            }
+                            if (y < height - 1) {
+                                cell.LD = i + width - 1;
+                            }
                         }
                     }
                     else {
-                        if (x > 0) {
-                            cell.LU = i - 1;
-                        }
                         if (x < width - 1) {
-                            cell.RU = i + 1;
+                            if (y > 0) {
+                                cell.RU = i - width + 1;
+                            }
+                            if (y < height - 1) {
+                                cell.RD = i + width + 1;
+                            }
                         }
-                        if (y < height - 1) { 
-                            if (x > 0) {
-                                cell.LD = cell.D - 1;
-                            }
-                            if (x < width - 1) {
-                                cell.RD = cell.D + 1;
-                            }
+                        if (y > 0) {
+                            cell.LU = i - width;
+                        }
+                        if (y < height - 1) {
+                            cell.LD = i + width;
                         }
                     }
                 }
@@ -68,8 +68,8 @@ namespace HexGrid {
 
             this.Width = width;
             this.Height = height;
-            this.MapWidth  = width;
-            this.MapHeight = width > 1 ? height * 2 : height * 2 - 1;
+            this.MapWidth  = height > 1 ? width * 2 : width * 2 - 1;
+            this.MapHeight = height;
         }
     }
 }

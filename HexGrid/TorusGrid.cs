@@ -12,8 +12,8 @@ namespace HexGrid {
             for (int x = 0; x < width; x++) {
                 Cell cell_up = Cells[x], cell_down = Cells[x + width * (height - 1)];
 
-                cell_up.U = cell_down.Index;
-                cell_down.D = cell_up.Index;
+                cell_up.L = cell_down.Index;
+                cell_down.R = cell_up.Index;
 
                 if (x % 2 == 0) {
                     if (x > 0) {

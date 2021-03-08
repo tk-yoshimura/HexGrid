@@ -2,17 +2,17 @@
 
     /// <summary>Dir</summary>
     public enum Dir : int {
-        /// <summary>Upper</summary>
-        U,
-        /// <summary>LeftUpper</summary>
+        /// <summary>LeftDowner</summary>
         LU,
         /// <summary>RightUpper</summary>
         RU,
-        /// <summary>LeftDowner</summary>
+        /// <summary>Left</summary>
+        L,
+        /// <summary>Right</summary>
+        R,
+        /// <summary>LeftUpper</summary>
         LD,
         /// <summary>RightDowner</summary>
         RD,
-        /// <summary>Downer</summary>
-        D
     }
 }
