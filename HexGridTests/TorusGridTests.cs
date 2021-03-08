@@ -7,8 +7,8 @@ namespace HexGrid.Tests {
         [TestMethod()]
         public void TorusGridTest() {
 
-            for (int height = 2; height <= 8; height++) {
-                for (int width = 2; width <= 8; width += 2) {
+            for (int height = 2; height <= 8; height += 2) {
+                for (int width = 2; width <= 8; width++) {
 
                     Console.WriteLine($"size = {width}, {height}");
 
