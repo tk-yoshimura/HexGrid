@@ -3,16 +3,16 @@ using System;
 
 namespace HexGrid.Tests {
     [TestClass()]
-    public class RingGridTests {
+    public class TorusGridTests {
         [TestMethod()]
-        public void RingGridTest() {
+        public void TorusGridTest() {
 
-            for (int height = 1; height <= 8; height++) {
+            for (int height = 2; height <= 8; height++) {
                 for (int width = 2; width <= 8; width += 2) {
 
                     Console.WriteLine($"size = {width}, {height}");
 
-                    RingGrid grid = new RingGrid(width, height);
+                    TorusGrid grid = new TorusGrid(width, height);
 
                     Console.WriteLine($"mapsize = {grid.MapWidth}, {grid.MapHeight}");
 

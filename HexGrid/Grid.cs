@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
 namespace HexGrid {
 
     /// <summary>Generic Grid</summary>
+    [DebuggerDisplay("Grid size:{MapWidth}x{MapHeight} cells:{Count}")]
     public class Grid {
         private readonly List<Cell> cell_list;
 
