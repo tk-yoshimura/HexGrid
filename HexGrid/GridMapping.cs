@@ -7,10 +7,10 @@ namespace HexGrid {
         private readonly bool is_even;
 
         /// <summary>Width</summary>
-        public double Width { get; private set; }
+        public int Width { get; private set; }
         
         /// <summary>Height</summary>
-        public double Height { get; private set; }
+        public int Height { get; private set; }
 
         /// <summary>MakeInstance</summary>
         public GridMapping(Grid grid) {
@@ -20,23 +20,16 @@ namespace HexGrid {
 
             this.map = grid.Map;
             this.is_even = (grid[0].X + grid[0].Y) % 2 == 0;
-            this.Width = grid.MapWidth * 0.5;
+            this.Width = grid.MapWidth;
             this.Height = grid.MapHeight;
         }
 
         /// <summary>Mapped Cell Index</summary>
-        public int this[double u, double v]{
+        public int this[int x, int y]{
             get{
-                if (!InRange(u, v)) {
-                    return Cell.None;
-                }
-
-                int x = (int)Math.Floor(u * 2);
-                int y = (int)Math.Floor(v);
-
                 x = ((y % 2 == 0) ^ is_even) ? ((x - 1) | 1) : (x & ~1);
 
-                if (x < 0 || x >= map.GetLength(0) || y >= map.GetLength(1)) {
+                if (!InRange(x, y)) {
                     return Cell.None;
                 }
 
@@ -45,8 +38,8 @@ namespace HexGrid {
         }
 
         /// <summary>Judgement in range</summary>
-        public bool InRange(double u, double v) {
-            return u >= 0 && u <= Width && v >= 0 && v <= Height;
+        private bool InRange(int x, int y) {
+            return x >= 0 && x < Width && y >= 0 && y < Height;
         }
     }
 }

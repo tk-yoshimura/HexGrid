@@ -19,9 +19,9 @@ namespace HexGrid.Tests {
 
                 Console.WriteLine(grid.ToString());
 
-                for (double v = 0; v <= mapping.Height; v += 0.5) { 
-                    for (double u = 0; u <= mapping.Width; u += 0.5) {
-                        Console.WriteLine($"{u:F1},{v:F1} : {mapping[u, v]}");
+                for (int y = 0; y < mapping.Height; y++) { 
+                    for (int x = 0; x <= mapping.Width; x++) {
+                        Console.WriteLine($"{x},{y} : {mapping[x, y]}");
                     }
 
                     Console.WriteLine("");
