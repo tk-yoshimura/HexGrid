@@ -20,6 +20,9 @@ namespace HexGrid {
         /// <summary>Dir to Coord</summary>
         public static IReadOnlyDictionary<Dir, (int dx, int dy)> DirToCoord => dir_coord_table;
 
+        /// <summary>InvalidCell</summary>
+        public static Cell Invalid => new Cell(None);
+
         /// <summary>Index</summary>
         public int Index { get; private set; }
 
